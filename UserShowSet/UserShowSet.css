@@ -1,0 +1,97 @@
+body {
+    overflow-x: hidden;
+    color: #334;
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+
+.leftPart {
+    background: #444;
+    height: 100%;
+    text-align: center;
+    box-shadow: 6px 0 12px #AAA;
+    border-right: 1px solid #AAA;
+    padding: 0;
+}
+
+.midPart {
+    background: #FF;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.avatarMid {
+    width: 50%;
+    min-width: 16px;
+    border-radius: 100%;
+    max-width: 256px;
+    margin: 8px;
+    box-shadow: 0 0 8px #AAA;
+    border: 1px solid #AAA;
+}
+
+.caption {
+    font-size: 12px;
+}
+
+.white {
+    color: white;
+}
+
+.spaceMin {
+    height: 8px;
+    width: 8px;
+}
+
+.center {
+    width: 100%;
+    text-align: center;
+}
+
+.txt {
+    font-size: 14px;
+}
+
+.subtitle {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.downlit {
+    margin-top: 3px
+}
+
+.elips {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.btnmin {
+    margin: 3px 1px;
+}
+
+.temp {
+    display: none;
+}
+
+.tableline tr {
+    border-bottom: 1px solid #EEE;
+    height: 64px;
+}
+
+.tcenter{
+    text-align: center
+}
+
+.gray {
+    background: #EEE
+}
+
+.right {
+    text-align: right;
+}

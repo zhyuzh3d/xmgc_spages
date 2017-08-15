@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>项目工场 | 班级项目展示</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery-url-parser/2.3.1/purl.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link href="DevClassShow.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <div style="position: fixed;width: 100%;height: 100%;">
+        <canvas id='aniBg'></canvas>
+    </div>
+    <div style="position: absolute;width: 100%;height: 100%;">
+        <div id="temp" style="display: none">
+            <div id='pcard' class="row container-fluid" style="padding: 16px ">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-8 card container-fluid" style="background: rgba(255, 255, 255, 0.75);padding: 0">
+                    <div class="col-sm-12 container-fluid cardCont">
+                        <a id='vlink' href='' style="opacity: 0.85">
+                            <div id='pic' class="col-sm-4 cardLeft" style='text-align: center'>
+                                <div class="glyphicon glyphicon-play-circle playBtn" aria-hidden="true"></div>
+                            </div>
+                        </a>
+                        <div class="col-sm-8 cardRight">
+                            <div style="height: 8px"></div>
+                            <a id='plink' href="" style='cursor: pointer'>
+                                <h4 id='title'>▇▇▇▇▇▇</h4>
+                            </a>
+                            <p id='brief' class='cardBrief'>
+                                ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇
+                            </p>
+                            <div id='userList' class="ulist">
+                                <!--用户头像填充到这里-->
+                            </div>
+                            <p style="height:0px"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2"></div>
+            </div>
+
+            <!--用户小头像-->
+            <a id='ucard' href=''>
+                <div class="avatar">
+                    <img id='avatar' src="http://www.xmgc360.com/_imgs/thumtemp.jpg">
+                    <div id='name' style="margin-top: -4px;">▇▇▇</div>
+                </div>
+            </a>
+        </div>
+
+        <!--以下正文-->
+        <div id='topBox' class="jumbotron">
+            <div class="shadow"></div>
+            <div id='topText' class="row container">
+                <div class="col-sm-2 col-md-1"></div>
+                <div class="col-sm-8 col-md-10">
+                    <p style="height: 20px"></p>
+                    <a href='http://www.xmgc360.com' style="color:white">项目工场</a>
+                    <a href='http://www.xmgc360.com' style="color:white">／ 班级项目展示</a>
+                    <h1 id='title' class='topTitle'>▇▇▇▇▇▇▇▇</h1>
+                    <div id='subtitle' style="font-size: 24px;font-weight: 800">▇▇▇▇▇▇</div>
+                    <hr style='margin:8px 0;opacity: 0.382'>
+                    <div>毕业时间：<span id='finiTime'>▇▇▇▇▇▇</span></div>
+                    <div>人才总量：<span id='count'>▇▇▇</span>&nbsp;&nbsp;【招聘热线0512-88888888】</div>
+                </div>
+            </div>
+        </div>
+        <div id='pcardList' class='cardList container-fluid' style="margin-top: -16px">
+            <!--        项目卡片填充到这里-->
+        </div>
+        <div style="height:48px"></div>
+        <div class="container footer">
+            <div style="color:#C05;font-weight: bold">人才招聘热线：0512-88888888</div>
+            <img src='https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=381924422,1283012028&fm=58&u_exp_0=4109858103,949706618&fm_exp_0=86&bpow=380&bpoh=380' width="120px" style="margin: 12px 0 6px 0">
+            <div>微信联络：钟老师</div>
+            <hr>
+            <div style="font-size: 12px;font-weight: 100">苏ICP备14053823号-1<br>本站点所有权归属于苏州高博应诺 <br>由项目工场（原杰米诺）团队提供综合支持</div>
+        </div>
+        <div style="height:36px"></div>
+    </div>
+</body>
+<script src="DevClassShow.js"></script>
+<script src="../Lib/longlineground.js"></script>
+
+</html>
