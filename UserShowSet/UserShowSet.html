@@ -21,7 +21,7 @@
         </tr>
         <tr id='showItem'>
             <td id='order' class="tcenter">1</td>
-            <td>我的展示项名称为维吾尔而温热温热</td>
+            <td id='title'>我的展示项名称为维吾尔而温热温热</td>
             <td>
                 <div id='upbtn' class="btn btn-xs btn-default btnmin">
                     <span class="glyphicon glyphicon-triangle-top downlit"></span>
@@ -38,12 +38,19 @@
             </td>
         </tr>
     </table>
-    <div class="col-xs-2 container-fluid leftPart">
+    <div id='profile' class="col-xs-2 container-fluid leftPart">
         <div class="spaceMin"></div>
         <div>
-            <img src="http://www.xmgc360.com/files/user/2017/07-25/150047f97113296953.jpg" class='avatarMid'>
-            <div class="visible-xs caption white center">王小白猫</div>
-            <div class="hidden-xs subtitle white center">王小白猫</div>
+            <img id='avatar' src="http://www.xmgc360.com/_imgs/thumtemp.jpg" class='avatarMid'>
+            <div id='name1' class="visible-xs caption white center">▇▇▇</div>
+            <div id='name2' class="hidden-xs subtitle white center">▇▇▇</div>
+            <div class="spaceMin"></div>
+            <a id='vbtn' class="btn" href='' target="_blank" style='display: none'>
+                <span class="glyphicon glyphicon-play-circle"></span><span id='txt'>视频</span>
+            </a>
+            <a id='cvbtn' class="btn" href='' target="_blank" style='display: none'>
+                <span class="glyphicon glyphicon-save-file"></span><span id='txt'>简历</span>
+            </a>
         </div>
     </div>
     <div class="col-xs-10 container midPart">
@@ -53,7 +60,12 @@
             <div id='uploadVideo' class="btn btn-default">
                 <span class="glyphicon glyphicon-arrow-up"></span><span id='txt'> 上传个人视频</span>
             </div>
-            <input id='uploadVideoIpt' type="file" style='display: none' />
+            <input id='uploadVideoIpt' type="file" accept='video/mp4' style='display: none' />
+            <div id='uploadResume' class="btn btn-default">
+                <span class="glyphicon glyphicon-arrow-up"></span><span id='txt'> 上传个人简历</span>
+            </div>
+            <input id='uploadResumeIpt' type="file" accept='application/msword,application/pdf' style='display: none' />
+            <div class="spaceMin"></div>
             <div id='openAddDialog' class="btn btn-default">
                 <span class="glyphicon glyphicon-plus"></span> 添加展示项
             </div>

@@ -25,11 +25,44 @@ for(var i = 0; i < 5; i++) {
 };
 
 
-
 /**
  * 替换基础的alert方法
  */
 window.alert = swal;
+
+
+
+/**
+ * 填充个人头像、姓名等信息
+ */
+function fillProfile() {
+    $.ajax({
+        type: "POST",
+        url: 'http://www.xmgc360.com/project/index.php/api/user/show',
+        dataType: "json",
+        success: function(res) {
+            var usr = res.data;
+            var jo = $('#profile');
+            jo.find('#name1').html(usr.name);
+            jo.find('#name2').html(usr.name);
+            jo.find('#avatar').attr('src', usr.thum || 'http://www.xmgc360.com/_imgs/thumtemp.jpg');
+            if(usr.video) {
+                jo.find('#vbtn').show();
+                jo.find('#vbtn').attr('href', usr.video);
+            } else {
+                jo.find('#vbtn').hide();
+            };
+            if(usr.cv) {
+                jo.find('#cvbtn').show();
+                jo.find('#cvbtn').attr('href', usr.cv);
+            } else {
+                jo.find('#cvbtn').hide();
+            };
+        },
+    });
+};
+fillProfile();
+
 
 
 /**
@@ -40,16 +73,25 @@ function fillTable() {
     var hd = $('#tableTemp').find('#showListHeader').clone(true, true);
     table.empty();
     table.append(hd);
-
-    dat.shows.forEach(function(item) {
-        var jo = $('#tableTemp').find('#showItem').clone(true, true);
-        jo.attr('id', item.id);
-        jo.find('#order').html(item.order);
-        jo.find('#title').html(item.title);
-        jo.find('#upbtn').attr('onclick', 'moveUp(' + item.id + ')');
-        jo.find('#downbtn').attr('onclick', 'moveDown(' + item.id + ')');
-        jo.find('#delbtn').attr('onclick', 'deleteItem(' + item.id + ')');
-        table.append(jo);
+    $.ajax({
+        type: "POST",
+        url: 'http://www.xmgc360.com/project/index.php/api/userresult/lists',
+        dataType: "json",
+        success: function(res) {
+            res.data.forEach(function(item) {
+                var jo = $('#tableTemp').find('#showItem').clone(true, true);
+                jo.attr('id', item.id);
+                jo.find('#order').html(item.order);
+                jo.find('#title').html(item.title);
+                jo.find('#upbtn').attr('onclick', 'moveUp(' + item.id + ')');
+                jo.find('#downbtn').attr('onclick', 'moveDown(' + item.id + ')');
+                jo.find('#delbtn').attr('onclick', 'deleteItem(' + item.id + ')');
+                table.append(jo);
+            });
+        },
+        error: function(err) {
+            toastr.error('读取展示列表失败:\n' + String(err.message));
+        }
     });
 };
 
@@ -61,34 +103,23 @@ fillTable();
  */
 $('#uploadVideo').click(function() {
     $('#uploadVideoIpt').click();
-    $('#uploadVideo').attr("disabled", true);
-    $('#uploadVideo #txt').html("正在启动...");
-    $('#uploadVideoIpt').files = [];
 });
 
 $('#uploadVideoIpt').change(function(evt) {
-    $QUNP.upload(evt.target.files[0], {
+    var file = evt.target.files[0]
+
+    $('#uploadVideo').attr("disabled", true);
+    $('#uploadVideo #txt').html("正在启动...");
+    $('#uploadVideoIpt').files = [];
+
+    $QUNP.upload(file, {
         complete: function(evt) {
             $('#uploadVideo').removeAttr("disabled");
             $('#uploadVideo #txt').html("上传个人视频");
             $('#uploadVideoIpt').files = [];
         },
         success: function(evt) {
-            //发送接口上传{video:''}
-            $.ajax({
-                type: "POST",
-                url: '',
-                data: {
-                    video: $QUNP.domain + '/' + evt.key,
-                },
-                dataType: "json",
-                success: function(data) {
-                    toastr.success('上传成功');
-                },
-                error: function(err) {
-                    alert(String(err.message));
-                }
-            });
+            getFileId(file.name, $QUNP.domain + evt.key, saveVideoId);
         },
         progress: function(evt) {
             var per = Math.floor(evt.loaded / evt.total * 100) + '%';
@@ -96,6 +127,84 @@ $('#uploadVideoIpt').change(function(evt) {
         },
     }, 'myphotos')
 });
+
+function saveVideoId(res) {
+    $.ajax({
+        type: "POST",
+        url: 'http://www.xmgc360.com/project/index.php/api/user/updatevideo',
+        data: {
+            videoid: res.id,
+        },
+        dataType: "json",
+        success: function(data) {
+            if(data.code == 1) {
+                toastr.success('上传视频成功！');
+                $('#profile #vbtn').show();
+                $('#profile #vbtn').attr('href', res.url);
+            } else {
+                alert('保存视频文件失败:\n' + String(err.message));
+            };
+        },
+        error: function(err) {
+            alert('保存视频文件失败:\n' + String(err.message));
+        }
+    });
+};
+
+
+/**
+ * 启动上传简历的方法
+ */
+$('#uploadResume').click(function() {
+    $('#uploadResumeIpt').click();
+});
+
+$('#uploadResumeIpt').change(function(evt) {
+    var file = evt.target.files[0]
+
+    $('#uploadResume').attr("disabled", true);
+    $('#uploadResume #txt').html("正在启动...");
+    $('#uploadResumeIpt').files = [];
+
+    $QUNP.upload(file, {
+        complete: function(evt) {
+            $('#uploadResume').removeAttr("disabled");
+            $('#uploadResume #txt').html("上传个人简历");
+            $('#uploadResumeIpt').files = [];
+        },
+        success: function(evt) {
+            getFileId(file.name, $QUNP.domain + evt.key, saveResumeId);
+        },
+        progress: function(evt) {
+            var per = Math.floor(evt.loaded / evt.total * 100) + '%';
+            $('#uploadResume #txt').html("已完成" + per);
+        },
+    }, 'myphotos')
+});
+
+function saveResumeId(res) {
+    $.ajax({
+        type: "POST",
+        url: 'http://www.xmgc360.com/project/index.php/api/user/updatecv',
+        data: {
+            cvid: res.id,
+        },
+        dataType: "json",
+        success: function(data) {
+            if(data.code == 1) {
+                toastr.success('上传简历成功！');
+                $('#profile #cvbtn').show();
+                $('#profile #cvbtn').attr('href', res.url);
+            } else {
+                alert('保存简历失败:\n' + String(err.message));
+            };
+        },
+        error: function(err) {
+            alert('保存简历失败:\n' + String(err.message));
+        }
+    });
+};
+
 
 /**
  * 打开弹窗
@@ -113,30 +222,29 @@ $('#openAddDialog').click(function() {
 
 $('#addItemBtn').click(function() {
     var dialog = $('#addItemModal');
-    var dt = {
-        title: dialog.find('#titleIpt').val(),
-        brief: dialog.find('#briefIpt').val(),
-        link: dialog.find('#linkIpt').val(),
-    };
 
-    //发送上面的数据到接口
+    //发送数据到接口
     $.ajax({
         type: "POST",
-        url: '',
+        url: 'http://www.xmgc360.com/project/index.php/api/userresult/create',
         data: {
             title: dialog.find('#titleIpt').val(),
             brief: dialog.find('#briefIpt').val(),
-            link: dialog.find('#linkIpt').val(),
-            img: dialog.find('#file').attr('url'),
+            fileid: dialog.find('#file').attr('fid'),
+            url: dialog.find('#linkIpt').val(),
         },
         dataType: "json",
-        success: function(data) {
-            dialog.modal('hide')
-            toastr.success('删除成功,自动刷新');
-            fillTable();
+        success: function(res) {
+            if(res.code == 1) {
+                dialog.modal('hide')
+                toastr.success('创建展示项成功,正在自动刷新');
+                fillTable();
+            } else {
+                alert('添加展示项失败:\n' + res.text);
+            };
         },
         error: function(err) {
-            alert(String(err.message));
+            alert('添加展示项失败:\n' + String(err.message));
         }
     });
 });
@@ -153,6 +261,7 @@ $('#uploadPic').click(function() {
 });
 
 $('#uploadPicIpt').change(function(evt) {
+    var dialog = $('#addItemModal');
     var file = evt.target.files[0];
     $QUNP.upload(file, {
         complete: function(evt) {
@@ -161,8 +270,11 @@ $('#uploadPicIpt').change(function(evt) {
             $('#uploadPic').files = [];
         },
         success: function(evt) {
-            $('#addItemModal #file').attr('url', $QUNP.domain + evt.key);
-            $('#addItemModal #file').html(file.name);
+            var furl = $QUNP.domain + evt.key;
+            getFileId(file.name, furl, function(res) {
+                dialog.find('#file').attr('fid', res.id);
+                dialog.find('#file').html(file.name);
+            });
         },
         progress: function(evt) {
             var per = Math.floor(evt.loaded / evt.total * 100) + '%';
@@ -170,6 +282,8 @@ $('#uploadPicIpt').change(function(evt) {
         },
     }, 'myphotos');
 });
+
+
 
 
 /**
@@ -188,7 +302,7 @@ function moveUp(id) {
             fillTable();
         },
         error: function(err) {
-            alert(String(err.message));
+            alert('删除失败:\n' + String(err.message));
         }
     });
 };
@@ -202,11 +316,11 @@ function moveDown(id) {
         },
         dataType: "json",
         success: function(data) {
-            toastr.success('删除成功,自动刷新');
+            toastr.success('下移成功,自动刷新');
             fillTable();
         },
         error: function(err) {
-            alert(String(err.message));
+            alert('下移失败:\n' + String(err.message));
         }
     });
 };
@@ -214,7 +328,7 @@ function moveDown(id) {
 function deleteItem(id) {
     $.ajax({
         type: "POST",
-        url: '',
+        url: 'http://www.xmgc360.com/project/index.php/api/userresult/delete',
         data: {
             id: id,
         },
@@ -224,12 +338,35 @@ function deleteItem(id) {
             fillTable();
         },
         error: function(err) {
-            alert(String(err.message));
-            toastr.success(String(err.message));
+            alert('上移失败:\n' + String(err.message));
         }
     });
 };
 
+
+/**
+ * 用url和文件名兑换file对象的id
+ * @param {string}   fname 文件名
+ * @param {string}   furl  七牛地址
+ * @param {function} cb    回调函数
+ */
+function getFileId(fname, furl, cb) {
+    $.ajax({
+        type: "POST",
+        url: 'http://www.xmgc360.com/project/index.php/api/common/uploadfileV2',
+        data: {
+            filename: fname,
+            fileurl: furl,
+        },
+        dataType: "json",
+        success: function(res) {
+            if(cb) cb(res.data);
+        },
+        error: function(err) {
+            console.log('>保存文件数据失败:' + String(err.message));
+        }
+    });
+};
 
 
 

@@ -12,7 +12,7 @@ var dat = {
         title: '项目的名称',
         icon: 'http://files.xmgc360.com/1/56fe508757a0d_102420160701174330.jpg',
         brief: '项目简介，建议100～200字；超过显示尺寸将需要滚动才能显示；项目简介，建议100～200字；超过显示尺寸将需要滚动才能显示',
-        video: 'http://files.xmgc360.com/coding.%E9%99%88%E5%AE%872016-09-17-22-16-37%E6%96%B0%E9%97%BB%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E7%AD%94%E8%BE%A9%E8%A7%86%E9%A2%91.mp4.mp4', //项目整体答辩视频
+        video: 'http://files.xmgc360.com/coding.%E9%99%88%E5%AE%872016-09-17-22-16-37%E6%96%B0%E9%97%BB%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E7%AD%94%E8%BE%A9%E8%A7%86%E9%A2%91.mp4.mp4', //上传的schedule整体答辩视频
         members: [{
             id: '33',
             name: '王小白猫',
@@ -39,18 +39,29 @@ var classId = $.url().param('id');
 
 function fillPage() {
     fillClass(dat.class);
+
+
+
     for(var i = 0; i < dat.projects.length; i++) {
         var card = genCard(dat.projects[i]);
         $('#pcardList').append(card);
-    }
+    };
 };
 
 function fillClass(cls) {
-    var box = $('#topBox');
-    box.find('#title').html(cls.title);
-    box.find('#subtitle').html(cls.subtitle);
-    box.find('#finiTime').html(cls.finiTime);
-    box.find('#count').html(cls.count);
+    var api = 'http://www.xmgc360.com/project/index.php/api/school/getclassdetails';
+    var dt = {
+        id: classId
+    };
+    //填充班级信息
+    $.post(api, dt, function(res) {
+        var cls = res.data;
+        var box = $('#topBox');
+        box.find('#title').html(cls.name);
+        box.find('#subtitle').html(cls.brief);
+        box.find('#finiTime').html(cls.finiTime || '2017年8月23日');
+        box.find('#count').html(cls.usercount);
+    }, 'json');
 };
 
 function genCard(project) {
