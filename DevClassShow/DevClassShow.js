@@ -36,44 +36,74 @@ for(var i = 0; i < 5; i++) {
 
 //填充页面
 var classId = $.url().param('id');
+var scId = $.url().param('scid');
 
 function fillPage() {
     fillClass(dat.class);
 
-
-
-    for(var i = 0; i < dat.projects.length; i++) {
-        var card = genCard(dat.projects[i]);
-        $('#pcardList').append(card);
+    var api = 'http://www.xmgc360.com/project/index.php/api/clas/scollection';
+    var dt = {
+        classid: classId,
+        scollectionid: scId,
     };
+    $.post(api, dt, function(res) {
+        if(res.code == 1) {
+            var slist = res.data.schedules;
+            for(var i = 0; i < slist.length; i++) {
+                var card = genCard(slist[i]);
+                $('#pcardList').append(card);
+            };
+        } else {
+            console.log('>读取班级信息失败:', res.text);
+        };
+    }, 'json');
 };
 
-function fillClass(cls) {
+/**
+ * 填充班级基本信息
+ */
+function fillClass() {
     var api = 'http://www.xmgc360.com/project/index.php/api/school/getclassdetails';
     var dt = {
         id: classId
     };
     //填充班级信息
     $.post(api, dt, function(res) {
-        var cls = res.data;
-        var box = $('#topBox');
-        box.find('#title').html(cls.name);
-        box.find('#subtitle').html(cls.brief);
-        box.find('#finiTime').html(cls.finiTime || '2017年8月23日');
-        box.find('#count').html(cls.usercount);
+        if(res.code == 1) {
+            var cls = res.data;
+            var box = $('#topBox');
+            box.find('#title').html(cls.name);
+            box.find('#subtitle').html(cls.brief);
+            box.find('#finiTime').html(cls.finiTime || '2017年8月23日');
+            box.find('#count').html(cls.usercount);
+        } else {
+            console.log('>读取班级信息失败:', res.text);
+        };
     }, 'json');
 };
 
-function genCard(project) {
+
+
+function genCard(schedule) {
+    var project = schedule.project;
     var pcard = $('#temp #pcard').clone(true, true);
-    pcard.find('#pic').css('background', 'url("' + project.icon + '") 0% 0% / cover #1d768a');
+    pcard.find('#pic').css('background', 'url("' + project.thum + '") 0% 0% / cover #1d768a');
     pcard.find('#title').html(project.title);
     pcard.find('#brief').html(project.brief);
-    pcard.find('#plink').attr('href', 'http://www.xmgc360.com/_pages/projectbrief/projectbrief.html?projectid=' + project.id);
-    pcard.find('#vlink').attr('href', project.video);
+    var purl = 'http://www.xmgc360.com/_pages/projectbrief/projectbrief.html?projectid=' + project.id;
+    pcard.find('#plink').attr('href', purl);
+    if(schedule.video) {
+        pcard.find('#vlink').attr('href', schedule.video);
+    } else {
+        pcard.find('#playbtn').hide();
+        pcard.find('#vlink').attr('href', purl);
+    };
 
-    for(var i = 0; i < project.members.length; i++) {
-        var ucard = genUcard(project.members[i]);
+    var users = schedule.joinusers || [];
+    users.unshift(schedule.author);
+
+    for(var i = 0; i < users.length; i++) {
+        var ucard = genUcard(users[i]);
         pcard.find('#userList').append(ucard);
     };
     return pcard;
@@ -83,8 +113,10 @@ function genCard(project) {
 function genUcard(user) {
     var ucard = $('#temp #ucard').clone(true, true);
     ucard.find('#name').html(user.name);
-    ucard.find('#avatar').attr('src', user.avatar);
-    ucard.attr('href', 'http://www.xmgc360.com/spages/UserShow/UserShow.html?id=' + user.id);
+    if(user.thum && user.thum != '') {
+        ucard.find('#avatar').attr('src', user.thum);
+    }
+    ucard.attr('href', 'http://www.xmgc360.com/spages/UserShow/UserShow.html?id=' + user.uid);
     return ucard;
 };
 

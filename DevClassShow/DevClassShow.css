@@ -3,7 +3,7 @@ body {
     color: #334;
     font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
     font-weight: normal;
-    -webkit-font-smoothing:antialiased;
+    -webkit-font-smoothing: antialiased;
 }
 
 a:hover {
@@ -67,7 +67,7 @@ a:hover {
 }
 
 .cardBrief {
-    max-height: 64px;
+    height: 66px;
     overflow: auto;
     color: #888;
     word-break: break-all;
@@ -92,7 +92,7 @@ a:hover {
     text-shadow: 0 0 12px #AAA;
 }
 
-.playBtn:hover{
+.playBtn:hover {
     opacity: 0.75;
 }
 
@@ -107,7 +107,8 @@ a:hover {
     display: inline-block;
     margin-right: 0px;
 }
-.avatar:hover{
+
+.avatar:hover {
     background: #EEE;
 }
 
@@ -132,4 +133,5 @@ a:hover {
 .ulist {
     height: 76px;
     overflow: auto;
+    border-top: 1px solid #EEE;
 }

@@ -20,7 +20,7 @@ function fillPage() {
 
 };
 
-function fillClass(cls) {
+function fillClass() {
     var api = 'http://www.xmgc360.com/project/index.php/api/school/getclassdetails';
     var dt = {
         id: classId
@@ -31,10 +31,9 @@ function fillClass(cls) {
         var box = $('#topBox');
         box.find('#title').html(cls.name);
         box.find('#subtitle').html(cls.brief);
-        box.find('#finiTime').html(cls.finiTime || '2017年8月23日');
+        box.find('#finiTime').html(cls.graduationdate || '2017年8月23日');
         box.find('#count').html(cls.usercount);
     }, 'json');
-
 };
 
 function genCard(user) {

@@ -29,7 +29,9 @@ for(var i = 0; i < 5; i++) {
  * 替换基础的alert方法
  */
 window.alert = swal;
-
+$(function() {
+    $('[data-toggle="tooltip"]').tooltip()
+})
 
 
 /**
@@ -41,23 +43,34 @@ function fillProfile() {
         url: 'http://www.xmgc360.com/project/index.php/api/user/show',
         dataType: "json",
         success: function(res) {
-            var usr = res.data;
-            var jo = $('#profile');
-            jo.find('#name1').html(usr.name);
-            jo.find('#name2').html(usr.name);
-            jo.find('#avatar').attr('src', usr.thum || 'http://www.xmgc360.com/_imgs/thumtemp.jpg');
-            if(usr.video) {
-                jo.find('#vbtn').show();
-                jo.find('#vbtn').attr('href', usr.video);
+            if(res.code == 1) {
+
+                var usr = res.data;
+                var jo = $('#profile');
+                jo.find('#name1').html(usr.name);
+                jo.find('#name2').html(usr.name);
+                jo.find('#aboutTxt').html(usr.about);
+                var showurl = 'http://www.xmgc360.com/spages/UserShow/UserShow.html?id=' + usr.uid;
+                jo.find('#showlink').attr('href', showurl);
+                if(usr.thum && usr.thum != '') jo.find('#avatar').attr('src', usr.thum);
+                jo.find('#previewBtn').attr('href', showurl);
+                if(usr.video) {
+                    jo.find('#vbtn').show();
+                    jo.find('#vbtn').attr('href', usr.video);
+                } else {
+                    jo.find('#vbtn').hide();
+                };
+                if(usr.cv) {
+                    jo.find('#cvbtn').show();
+                    jo.find('#cvbtn').attr('href', usr.cv);
+                } else {
+                    jo.find('#cvbtn').hide();
+                };
             } else {
-                jo.find('#vbtn').hide();
-            };
-            if(usr.cv) {
-                jo.find('#cvbtn').show();
-                jo.find('#cvbtn').attr('href', usr.cv);
-            } else {
-                jo.find('#cvbtn').hide();
-            };
+                alert({ title: '您还没有登陆，无法进行设置。点击确定返回', confirmButtonText: "返回" }, function() {
+                    history.back();
+                });
+            }
         },
     });
 };
@@ -207,7 +220,48 @@ function saveResumeId(res) {
 
 
 /**
- * 打开弹窗
+ * 打开编辑简介弹窗
+ */
+$('#editAboutBtn').click(function() {
+    var dialog = $('#editAboutDialog');
+    var txt = $('#aboutTxt').html();
+    dialog.find('#txtIpt').val(txt);
+    dialog.modal();
+});
+
+$('#saveAboutBtn').click(function() {
+    var dialog = $('#editAboutDialog');
+    var txt = dialog.find('#txtIpt').val();
+
+    //发送数据到接口
+    $.ajax({
+        type: "POST",
+        url: 'http://www.xmgc360.com/project/index.php/api/user/updateabout',
+        data: {
+            about: txt,
+        },
+        dataType: "json",
+        success: function(res) {
+            if(res.code == 1) {
+                dialog.modal('hide');
+                toastr.success('更新简历成功');
+                $('#aboutTxt').html(txt);
+            } else {
+                alert('更新简历失败:\n' + res.text);
+            };
+        },
+        error: function(err) {
+            alert('更新简历失败:\n' + String(err.message));
+        }
+    });
+});
+
+
+
+
+
+/**
+ * 打开添加展示项弹窗
  */
 $('#openAddDialog').click(function() {
     var dialog = $('#addItemModal');
@@ -266,7 +320,7 @@ $('#uploadPicIpt').change(function(evt) {
     $QUNP.upload(file, {
         complete: function(evt) {
             $('#uploadPic').removeAttr("disabled");
-            $('#uploadPic #txt').html("上传个人视频");
+            $('#uploadPic #txt').html("上传封面");
             $('#uploadPic').files = [];
         },
         success: function(evt) {
@@ -292,14 +346,18 @@ $('#uploadPicIpt').change(function(evt) {
 function moveUp(id) {
     $.ajax({
         type: "POST",
-        url: '',
+        url: 'http://www.xmgc360.com/project/index.php/api/userresult/moveup',
         data: {
             id: id,
         },
         dataType: "json",
-        success: function(data) {
-            toastr.success('删除成功,自动刷新');
-            fillTable();
+        success: function(res) {
+            if(res.code == 1) {
+                toastr.success('上移成功,自动刷新');
+                fillTable();
+            } else {
+                toastr.error('上移失败:' + res.text);
+            }
         },
         error: function(err) {
             alert('删除失败:\n' + String(err.message));
@@ -310,14 +368,18 @@ function moveUp(id) {
 function moveDown(id) {
     $.ajax({
         type: "POST",
-        url: '',
+        url: 'http://www.xmgc360.com/project/index.php/api/userresult/movedown',
         data: {
             id: id,
         },
         dataType: "json",
-        success: function(data) {
-            toastr.success('下移成功,自动刷新');
-            fillTable();
+        success: function(res) {
+            if(res.code == 1) {
+                toastr.success('下移成功,自动刷新');
+                fillTable();
+            } else {
+                toastr.error('上移失败:' + res.text);
+            }
         },
         error: function(err) {
             alert('下移失败:\n' + String(err.message));

@@ -21,7 +21,7 @@
         </tr>
         <tr id='showItem'>
             <td id='order' class="tcenter">1</td>
-            <td id='title'>我的展示项名称为维吾尔而温热温热</td>
+            <td id='title'>▇▇▇▇▇▇▇▇▇▇▇▇</td>
             <td>
                 <div id='upbtn' class="btn btn-xs btn-default btnmin">
                     <span class="glyphicon glyphicon-triangle-top downlit"></span>
@@ -41,16 +41,28 @@
     <div id='profile' class="col-xs-2 container-fluid leftPart">
         <div class="spaceMin"></div>
         <div>
-            <img id='avatar' src="http://www.xmgc360.com/_imgs/thumtemp.jpg" class='avatarMid'>
-            <div id='name1' class="visible-xs caption white center">▇▇▇</div>
-            <div id='name2' class="hidden-xs subtitle white center">▇▇▇</div>
+            <a id='showlink' href="" target="_blank">
+                <img id='avatar' src="http://www.xmgc360.com/_imgs/thumtemp.jpg" class='avatarMid'>
+                <div id='name1' class="visible-xs caption white center">▇▇▇</div>
+                <div id='name2' class="hidden-xs subtitle white center">▇▇▇</div>
+            </a>
             <div class="spaceMin"></div>
-            <a id='vbtn' class="btn" href='' target="_blank" style='display: none'>
+            <a id='vbtn' class="btn" href='' target="_blank" style='display: none'  data-toggle="tooltip" data-placement="right" title="播放个人视频">
                 <span class="glyphicon glyphicon-play-circle"></span><span id='txt'>视频</span>
             </a>
-            <a id='cvbtn' class="btn" href='' target="_blank" style='display: none'>
+            <a id='cvbtn' class="btn" href='' target="_blank" style='display: none'  data-toggle="tooltip" data-placement="right" title="下载个人简历">
                 <span class="glyphicon glyphicon-save-file"></span><span id='txt'>简历</span>
             </a>
+            <div class="spaceMin"></div>
+            <div id='about'>
+                <div id='aboutTxt' class="hidden-xs abouttxt">▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇</div>
+                <span id='editAboutBtn' class="btn bnt-default left white" data-toggle="tooltip" data-placement="right" title="编辑个人简介">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </span>
+            </div>
+            <div class="spaceMin"></div>
+            <a id='previewBtn' class="btn btn-primary"  target="_blank" data-toggle="tooltip" data-placement="right" title="打开个人展示页预览">预览</a>
+
         </div>
     </div>
     <div class="col-xs-10 container midPart">
@@ -62,8 +74,9 @@
             </div>
             <input id='uploadVideoIpt' type="file" accept='video/mp4' style='display: none' />
             <div id='uploadResume' class="btn btn-default">
-                <span class="glyphicon glyphicon-arrow-up"></span><span id='txt'> 上传个人简历</span>
+                <span class="glyphicon glyphicon-arrow-up"></span><span id='txt'> 上传简历</span>
             </div>
+
             <input id='uploadResumeIpt' type="file" accept='application/msword,application/pdf' style='display: none' />
             <div class="spaceMin"></div>
             <div id='openAddDialog' class="btn btn-default">
@@ -116,6 +129,29 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="editAboutDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">编辑简介</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <span class="input-group-addon" style="vertical-align: top">简介</span>
+                        <textarea id='txtIpt' type="text" class="form-control" placeholder="标题不超过200文字" style="height: 120px"></textarea>
+                    </div>
+                    <div class="spaceMin"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button id='saveAboutBtn' type="button" class="btn btn-primary">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
 </body>
 <script src="../Lib/qnUploader.js"></script>
@@ -124,4 +160,5 @@
 <link href="https://cdn.bootcss.com/toastr.js/latest/toastr.min.css" rel="stylesheet">
 <script src="https://cdn.bootcss.com/toastr.js/latest/toastr.min.js"></script>
 <script src="UserShowSet.js"></script>
+
 </html>
